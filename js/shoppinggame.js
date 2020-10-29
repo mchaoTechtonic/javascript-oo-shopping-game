@@ -19,11 +19,43 @@ const player = {
 };
 
 // Define the Product class - write the Constructor function for Product class here
+function Product(id, name, price, expiryDate) {
+    // Object.assign(this, { id, name, price, expiryDate });
+    this.id = id;
+    this.name = name;
+    this.price = price;
+    this.expiryDate = expiryDate;
+}
 
 // Complete the dateDiff function
-const dateDiff = (date1, date2) => { };
+// https://stackoverflow.com/a/11252167
+function treatAsUTC(date) {
+    var result = new Date(date);
+    result.setMinutes(result.getMinutes() - result.getTimezoneOffset());
+    return result;
+}
+
+function daysBetween(startDate, endDate) {
+    var millisecondsPerDay = 24 * 60 * 60 * 1000;
+    return (treatAsUTC(endDate) - treatAsUTC(startDate)) / millisecondsPerDay;
+}
+
+// NOTE: date1 will be the LATER date in the daysToExpire function below
+const dateDiff = (date1, date2) => {
+    return daysBetween(date2, date1);
+};
 
 // Here, use Object.defineProperty to create property - daysToExpire
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty
+Object.defineProperty(
+    Product.prototype,
+    'daysToExpire',
+    {
+        get() {
+            return dateDiff(this.expiryDate, new Date());
+        }
+    }
+)
 
 // Add method getDetails to Product here
 
